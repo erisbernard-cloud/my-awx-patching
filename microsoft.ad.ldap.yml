@@ -1,4 +1,4 @@
-# ansible-inventory -i NPRad_inventory.yml --list
+# ansible-inventory -i microsoft.ad.ldap.yml --list
 plugin: microsoft.ad.ldap
 
 server: ad.bcm.edu
