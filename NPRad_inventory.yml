@@ -1,0 +1,21 @@
+plugin: microsoft.ad.ldap
+
+server: ad.bcm.edu
+port: 389
+
+username: "{{ ad_username }}"
+password: "{{ ad_password }}"
+
+base_dn: "OU=Desktop-NPR,OU=Computers,OU=ORIT,DC=ad,DC=bcm,DC=edu"
+
+filter: "(objectClass=computer)"
+
+attributes:
+  - name
+  - dNSHostName
+
+compose:
+  ansible_host: dNSHostName
+
+groups:
+  windows: true
