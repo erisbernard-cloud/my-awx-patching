@@ -1,5 +1,6 @@
 # ansible-inventory -i microsoft.ad.ldap.yml --list
 plugin: microsoft.ad.plugins.inventory.ldap
+...
 
 server: ad.bcm.edu
 port: 389
