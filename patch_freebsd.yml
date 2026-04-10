@@ -1,0 +1,25 @@
+---
+- name: Patch FreeBSD servers
+  hosts: freebsd
+  become: true
+  serial: 1
+
+  tasks:
+    - name: Check for base OS updates
+      command: freebsd-update fetch
+      register: fetch_result
+      changed_when: "'No updates needed' not in fetch_result.stdout"
+
+    - name: Install base OS updates
+      command: freebsd-update install
+      register: install_result
+      changed_when: "'No updates installed' not in install_result.stdout"
+
+    - name: Update packages
+      pkgng:
+        name: "*"
+        state: latest
+
+    - name: Notify reboot required
+      debug:
+        msg: "Reboot required if kernel or libc was updated"
