@@ -1,3 +1,0 @@
-sansldap
-pyspnego
-dnspython
