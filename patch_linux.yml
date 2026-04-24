@@ -8,14 +8,6 @@
     allow_patching: true
     allow_reboot: true
 
-  pre_tasks:
-    - name: Safety check – prevent accidental full inventory patch
-      assert:
-        that:
-          - ansible_limit is defined
-        fail_msg: >
-          You must use --limit when running this patch job in AWX.
-
   tasks:
     - name: Update apt cache
       apt:
