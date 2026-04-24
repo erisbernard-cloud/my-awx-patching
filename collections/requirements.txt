@@ -1,0 +1,4 @@
+ansible>=2.15.0
+jmespath
+pyspnego
+dnspython
