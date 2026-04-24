@@ -1,0 +1,46 @@
+---
+- name: On-demand Ubuntu patching
+  hosts: all
+  become: yes
+  gather_facts: yes
+
+  vars:
+    allow_patching: true
+    allow_reboot: true
+
+  pre_tasks:
+    - name: Safety check – prevent accidental full inventory patch
+      assert:
+        that:
+          - ansible_limit is defined
+        fail_msg: >
+          You must use --limit when running this patch job in AWX.
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+        force_apt_get: yes
+
+    - name: Upgrade all packages
+      apt:
+        upgrade: dist
+        autoremove: yes
+        autoclean: yes
+        force_apt_get: yes
+      when: allow_patching | bool
+
+    - name: Check if reboot is required
+      stat:
+        path: /var/run/reboot-required
+      register: reboot_required_file
+
+    - name: Reboot if required and allowed
+      reboot:
+        msg: "Rebooting after patching via AWX"
+        reboot_timeout: 900
+        connect_timeout: 5
+      when:
+        - reboot_required_file.stat.exists
+        - allow_reboot | bool
